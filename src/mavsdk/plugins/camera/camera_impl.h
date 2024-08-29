@@ -23,88 +23,103 @@ public:
     void enable() override;
     void disable() override;
 
-    Camera::Result prepare();
-    Camera::Result select_camera(size_t id);
+    Camera::Result take_photo(int32_t camera_id);
 
-    Camera::Result take_photo();
+    Camera::Result start_photo_interval(int32_t camera_id, float interval_s);
+    Camera::Result stop_photo_interval(int32_t camera_id);
 
-    Camera::Result start_photo_interval(float interval_s);
-    Camera::Result stop_photo_interval();
+    Camera::Result start_video(int32_t camera_id);
+    Camera::Result stop_video(int32_t camera_id);
 
-    Camera::Result start_video();
-    Camera::Result stop_video();
+    Camera::Result zoom_in_start(int32_t camera_id);
+    Camera::Result zoom_out_start(int32_t camera_id);
+    Camera::Result zoom_stop(int32_t camera_id);
+    Camera::Result zoom_range(int32_t camera_id, float range);
 
-    Camera::Result zoom_in_start();
-    Camera::Result zoom_out_start();
-    Camera::Result zoom_stop();
-    Camera::Result zoom_range(float range);
-    Camera::Result track_point(float point_x, float point_y, float radius);
-    Camera::Result
-    track_rectangle(float top_left_x, float top_left_y, float bottom_right_x, float bottom_right_y);
-    Camera::Result track_stop();
-    Camera::Result focus_in_start();
-    Camera::Result focus_out_start();
-    Camera::Result focus_stop();
-    Camera::Result focus_range(float range);
+    Camera::Result track_point(int32_t camera_id, float point_x, float point_y, float radius);
+    Camera::Result track_rectangle(
+        int32_t camera_id,
+        float top_left_x,
+        float top_left_y,
+        float bottom_right_x,
+        float bottom_right_y);
+    Camera::Result track_stop(int32_t camera_id);
+    Camera::Result focus_in_start(int32_t camera_id);
+    Camera::Result focus_out_start(int32_t camera_id);
+    Camera::Result focus_stop(int32_t camera_id);
+    Camera::Result focus_range(int32_t camera_id, float range);
 
-    void zoom_in_start_async(const Camera::ResultCallback& callback);
-    void zoom_out_start_async(const Camera::ResultCallback& callback);
-    void zoom_stop_async(const Camera::ResultCallback& callback);
-    void zoom_range_async(float range, const Camera::ResultCallback& callback);
+    void zoom_in_start_async(int32_t camera_id, const Camera::ResultCallback& callback);
+    void zoom_out_start_async(int32_t camera_id, const Camera::ResultCallback& callback);
+    void zoom_stop_async(int32_t camera_id, const Camera::ResultCallback& callback);
+    void zoom_range_async(int32_t camera_id, float range, const Camera::ResultCallback& callback);
+
     void track_point_async(
-        float point_x, float point_y, float radius, const Camera::ResultCallback& callback);
+        int32_t camera_id,
+        float point_x,
+        float point_y,
+        float radius,
+        const Camera::ResultCallback& callback);
     void track_rectangle_async(
+        int32_t camera_id,
         float top_left_x,
         float top_left_y,
         float bottom_right_x,
         float bottom_right_y,
         const Camera::ResultCallback& callback);
-    void track_stop_async(const Camera::ResultCallback& callback);
-    void focus_in_start_async(const Camera::ResultCallback& callback);
-    void focus_out_start_async(const Camera::ResultCallback& callback);
-    void focus_stop_async(const Camera::ResultCallback& callback);
-    void focus_range_async(float range, const Camera::ResultCallback& callback);
+    void track_stop_async(int32_t camera_id, const Camera::ResultCallback& callback);
 
-    void prepare_async(const Camera::ResultCallback& callback);
-    void take_photo_async(const Camera::ResultCallback& callback);
-    void start_photo_interval_async(float interval_s, const Camera::ResultCallback& callback);
-    void stop_photo_interval_async(const Camera::ResultCallback& callback);
-    void start_video_async(const Camera::ResultCallback& callback);
-    void stop_video_async(const Camera::ResultCallback& callback);
+    void focus_in_start_async(int32_t camera_id, const Camera::ResultCallback& callback);
+    void focus_out_start_async(int32_t camera_id, const Camera::ResultCallback& callback);
+    void focus_stop_async(int32_t camera_id, const Camera::ResultCallback& callback);
+    void focus_range_async(int32_t camera_id, float range, const Camera::ResultCallback& callback);
 
-    Camera::Information information() const;
-    Camera::InformationHandle subscribe_information(const Camera::InformationCallback& callback);
-    void unsubscribe_information(Camera::InformationHandle handle);
+    void take_photo_async(int32_t camera_id, const Camera::ResultCallback& callback);
+    void start_photo_interval_async(
+        int32_t camera_id, float interval_s, const Camera::ResultCallback& callback);
+    void stop_photo_interval_async(int32_t camera_id, const Camera::ResultCallback& callback);
+    void start_video_async(int32_t camera_id, const Camera::ResultCallback& callback);
+    void stop_video_async(int32_t camera_id, const Camera::ResultCallback& callback);
 
-    std::pair<Camera::Result, Camera::VideoStreamInfo> get_video_stream_info();
+    Camera::CameraList camera_list() const;
+    Camera::CameraListHandle subscribe_camera_list(const Camera::CameraListCallback& callback);
+    void unsubscribe_camera_list(Camera::CameraListHandle handle);
 
     Camera::VideoStreamInfo video_stream_info();
     Camera::VideoStreamInfoHandle
     subscribe_video_stream_info(const Camera::VideoStreamInfoCallback& callback);
     void unsubscribe_video_stream_info(Camera::VideoStreamInfoHandle handle);
 
-    Camera::Result start_video_streaming(int32_t stream_id);
-    Camera::Result stop_video_streaming(int32_t stream_id);
+    Camera::VideoStreamInfo get_video_stream_info(int32_t camera_id);
 
-    Camera::Result set_mode(const Camera::Mode mode);
-    void set_mode_async(const Camera::Mode mode, const Camera::ResultCallback& callback);
+    Camera::Result start_video_streaming(int32_t camera_id, int32_t stream_id);
+    Camera::Result stop_video_streaming(int32_t camera_id, int32_t stream_id);
 
-    Camera::Mode mode();
+    Camera::Result set_mode(int32_t camera_id, const Camera::Mode mode);
+    void set_mode_async(
+        int32_t camera_id, const Camera::Mode mode, const Camera::ResultCallback& callback);
+
+    Camera::Mode get_mode(int32_t camera_id);
+
     Camera::ModeHandle subscribe_mode(const Camera::ModeCallback& callback);
     void unsubscribe_mode(Camera::ModeHandle handle);
 
     Camera::CaptureInfoHandle subscribe_capture_info(const Camera::CaptureInfoCallback& callback);
     void unsubscribe_capture_info(Camera::CaptureInfoHandle handle);
 
-    Camera::Status status();
     Camera::StatusHandle subscribe_status(const Camera::StatusCallback& callback);
     void unsubscribe_status(Camera::StatusHandle handle);
 
-    Camera::Result set_setting(Camera::Setting setting);
-    void set_setting_async(Camera::Setting setting, const Camera::ResultCallback callback);
+    Camera::Status get_status(int32_t camera_id);
 
-    void get_setting_async(Camera::Setting setting, const Camera::GetSettingCallback callback);
-    std::pair<Camera::Result, Camera::Setting> get_setting(Camera::Setting setting);
+    Camera::Result set_setting(int32_t camera_id, Camera::Setting setting);
+    void set_setting_async(
+        int32_t camera_id, Camera::Setting setting, const Camera::ResultCallback callback);
+
+    void get_setting_async(
+        int32_t camera_id, Camera::Setting setting, const Camera::GetSettingCallback callback);
+    std::pair<Camera::Result, Camera::Setting>
+    get_setting(int32_t camera_id, Camera::Setting setting);
 
     std::vector<Camera::SettingOptions> possible_setting_options();
 
@@ -113,20 +128,29 @@ public:
     Camera::CurrentSettingsHandle
     subscribe_current_settings(const Camera::CurrentSettingsCallback& callback);
     void unsubscribe_current_settings(Camera::CurrentSettingsHandle handle);
+
+    std::pair<Camera::Result, std::vector<Camera::Setting>> get_current_settings(int32_t camera_id);
+
     Camera::PossibleSettingOptionsHandle
     subscribe_possible_setting_options(const Camera::PossibleSettingOptionsCallback& callback);
     void unsubscribe_possible_setting_options(Camera::PossibleSettingOptionsHandle handle);
 
-    Camera::Result format_storage(int32_t storage_id);
-    void format_storage_async(int32_t storage_id, const Camera::ResultCallback callback);
+    std::pair<Camera::Result, std::vector<Camera::SettingOptions>>
+    get_possible_setting_options(int32_t camera_id);
 
-    Camera::Result reset_settings();
-    void reset_settings_async(const Camera::ResultCallback callback);
+    Camera::Result format_storage(int32_t camera_id, int32_t storage_id);
+    void format_storage_async(
+        int32_t camera_id, int32_t storage_id, const Camera::ResultCallback callback);
+
+    Camera::Result reset_settings(int32_t camera_id);
+    void reset_settings_async(int32_t camera_id, const Camera::ResultCallback callback);
 
     std::pair<Camera::Result, std::vector<Camera::CaptureInfo>>
-    list_photos(Camera::PhotosRange photos_range);
-    void
-    list_photos_async(Camera::PhotosRange photos_range, const Camera::ListPhotosCallback callback);
+    list_photos(int32_t camera_id, Camera::PhotosRange photos_range);
+    void list_photos_async(
+        int32_t camera_id,
+        Camera::PhotosRange photos_range,
+        const Camera::ListPhotosCallback callback);
 
     CameraImpl(const CameraImpl&) = delete;
     CameraImpl& operator=(const CameraImpl&) = delete;
@@ -149,11 +173,6 @@ private:
     bool get_option_str(
         const std::string& setting_id, const std::string& option_id, std::string& description);
 
-    void check_connection_status();
-    void manual_enable();
-    void manual_disable();
-    void update_component();
-
     void receive_set_mode_command_result(
         const MavlinkCommandSender::Result command_result,
         const Camera::ResultCallback callback,
@@ -169,6 +188,7 @@ private:
 
     static bool interval_valid(float interval_s);
 
+    void process_heartbeat(const mavlink_message_t& message);
     void process_camera_image_captured(const mavlink_message_t& message);
     void process_storage_information(const mavlink_message_t& message);
     void process_camera_capture_status(const mavlink_message_t& message);
@@ -177,6 +197,8 @@ private:
     void process_video_information(const mavlink_message_t& message);
     void process_video_stream_status(const mavlink_message_t& message);
     void reset_following_format_storage();
+
+    void check_potential_cameras();
 
     Camera::Status::StorageStatus storage_status_from_mavlink(const int storage_status) const;
     Camera::Status::StorageType storage_type_from_mavlink(const int storage_type) const;
@@ -206,44 +228,80 @@ private:
     Camera::Mode to_camera_mode(const uint8_t mavlink_camera_mode) const;
 
     CallEveryHandler::Cookie _camera_information_call_every_cookie{};
-    CallEveryHandler::Cookie _check_connection_status_call_every_cookie{};
     CallEveryHandler::Cookie _request_missing_capture_info_cookie{};
 
-    void request_camera_settings();
-    void request_camera_information();
-    void request_video_stream_info();
-    void request_video_stream_status();
-    void request_status();
+    void request_camera_settings(int32_t camera_id);
+    void request_camera_information(uint8_t component_id);
+    void request_video_stream_info(int32_t camera_id);
+    void request_video_stream_status(int32_t camera_id);
+    void request_status(int32_t camera_id);
 
-    MavlinkCommandSender::CommandLong make_command_take_photo(float interval_s, float no_of_photos);
-    MavlinkCommandSender::CommandLong make_command_stop_photo();
-
-    MavlinkCommandSender::CommandLong make_command_set_camera_mode(float mavlink_mode);
-    MavlinkCommandSender::CommandLong make_command_start_video(float capture_status_rate_hz);
-    MavlinkCommandSender::CommandLong make_command_stop_video();
-
-    MavlinkCommandSender::CommandLong make_command_start_video_streaming(int32_t stream_id);
-    MavlinkCommandSender::CommandLong make_command_stop_video_streaming(int32_t stream_id);
-
-    MavlinkCommandSender::CommandLong make_command_zoom_in();
-    MavlinkCommandSender::CommandLong make_command_zoom_out();
-    MavlinkCommandSender::CommandLong make_command_zoom_stop();
-    MavlinkCommandSender::CommandLong make_command_zoom_range(float range);
     MavlinkCommandSender::CommandLong
-    make_command_track_point(float point_x, float point_y, float radius);
+    make_command_take_photo(int32_t camera_id, float interval_s, float no_of_photos);
+    MavlinkCommandSender::CommandLong make_command_stop_photo(int32_t camera_id);
+
+    MavlinkCommandSender::CommandLong make_command_request_camera_info(int32_t camera_id);
+    MavlinkCommandSender::CommandLong
+    make_command_set_camera_mode(int32_t camera_id, float mavlink_mode);
+    MavlinkCommandSender::CommandLong make_command_request_camera_settings(int32_t camera_id);
+    MavlinkCommandSender::CommandLong make_command_request_camera_capture_status(int32_t camera_id);
+    MavlinkCommandSender::CommandLong
+    make_command_request_camera_image_captured(int32_t camera_id, size_t photo_id);
+    MavlinkCommandSender::CommandLong make_command_request_storage_info(int32_t camera_id);
+
+    MavlinkCommandSender::CommandLong
+    make_command_start_video(int32_t camera_id, float capture_status_rate_hz);
+    MavlinkCommandSender::CommandLong make_command_stop_video(int32_t camera_id);
+
+    MavlinkCommandSender::CommandLong
+    make_command_start_video_streaming(int32_t camera_id, int32_t stream_id);
+    MavlinkCommandSender::CommandLong
+    make_command_stop_video_streaming(int32_t camera_id, int32_t stream_id);
+
+    MavlinkCommandSender::CommandLong make_command_zoom_in(int32_t camera_id);
+    MavlinkCommandSender::CommandLong make_command_zoom_out(int32_t camera_id);
+    MavlinkCommandSender::CommandLong make_command_zoom_stop(int32_t camera_id);
+    MavlinkCommandSender::CommandLong make_command_zoom_range(int32_t camera_id, float range);
+    MavlinkCommandSender::CommandLong
+    make_command_track_point(int32_t camera_id, float point_x, float point_y, float radius);
     MavlinkCommandSender::CommandLong make_command_track_rectangle(
-        float top_left_x, float top_left_y, float bottom_right_x, float bottom_right_y);
-    MavlinkCommandSender::CommandLong make_command_track_stop();
-    MavlinkCommandSender::CommandLong make_command_focus_in();
-    MavlinkCommandSender::CommandLong make_command_focus_out();
-    MavlinkCommandSender::CommandLong make_command_focus_stop();
-    MavlinkCommandSender::CommandLong make_command_focus_range(float range);
+        int32_t camera_id,
+        float top_left_x,
+        float top_left_y,
+        float bottom_right_x,
+        float bottom_right_y);
+    MavlinkCommandSender::CommandLong make_command_track_stop(int32_t camera_id);
+    MavlinkCommandSender::CommandLong make_command_focus_in(int32_t camera_id);
+    MavlinkCommandSender::CommandLong make_command_focus_out(int32_t camera_id);
+    MavlinkCommandSender::CommandLong make_command_focus_stop(int32_t camera_id);
+    MavlinkCommandSender::CommandLong make_command_focus_range(int32_t camera_id, float range);
 
     void request_missing_capture_info();
+
+    uint8_t component_id_for_camera_id(int32_t camera_id);
 
     static bool starts_with(const std::string& str, const std::string& prefix);
     static std::string get_filename_from_path(const std::string& path);
     static std::string strip_mavlinkftp_prefix(const std::string& str);
+
+    struct PotentialCamera {
+        std::optional<Camera::Information> maybe_information;
+
+        std::unique_ptr<CameraDefinition> _camera_definition{};
+        bool _is_fetching_camera_definition{false};
+        bool _has_camera_definition_timed_out{false};
+        size_t _camera_definition_fetch_count{0};
+        using CameraDefinitionCallback = std::function<void(Camera::Result)>;
+        CameraDefinitionCallback _camera_definition_callback{};
+
+        bool information_requested{false};
+        uint8_t component_id;
+    };
+
+    std::mutex _potential_cameras_mutex;
+    std::vector<PotentialCamera> _potential_cameras;
+
+    CallEveryHandler::Cookie _check_potential_cameras_call_every_cookie{};
 
     std::unique_ptr<CameraDefinition> _camera_definition{};
     bool _is_fetching_camera_definition{false};
@@ -274,7 +332,7 @@ private:
     struct {
         std::mutex mutex{};
         Camera::Mode data{};
-        CallbackList<Camera::Mode> subscription_callbacks{};
+        CallbackList<Camera::ModeInfo> subscription_callbacks{};
         CallEveryHandler::Cookie call_every_cookie{};
     } _mode{};
 
@@ -300,9 +358,9 @@ private:
 
     struct {
         mutable std::mutex mutex{};
-        Camera::Information data{};
-        CallbackList<Camera::Information> subscription_callbacks{};
-    } _information{};
+        Camera::CameraList data{};
+        CallbackList<Camera::CameraList> subscription_callbacks{};
+    } _camera_list{};
 
     struct {
         std::mutex mutex{};
